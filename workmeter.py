@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Fri Nov 16 04:17:05 2018
-
-@author: user
-"""
-
 from imutils import face_utils
 import dlib
 import cv2
@@ -76,8 +69,8 @@ work=1
 slist=[]
 ss=0
 
-file= open("gur w still.txt","w+")
-file2= open("gur w smile.txt","w+")
+file= open("stillness.txt","w+")
+file2= open("smile.txt","w+")
 
 nosmile=0
 
@@ -139,51 +132,6 @@ while True:
         divby=math.cos(num)
         ans=distance/divby
         
-        #cv2.putText(frame, 'DIST: {} %'.format(ans), (10, 70), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255, 255), 2)
-        
-        #TODO sd
-        '''
-        avg=(ans-70)/180
-        
-        kk=int((avg*14)+6)
-        minn=int((avg*92)+13) 
-        
-        
-        
-        print('minNeighbours 70-125 =',minn)
-        print('minSize 13-21 =',kk)
-                
-        smile = smileCascade.detectMultiScale(
-            roi_gray,
-            scaleFactor= 1.2,
-            minNeighbors=minn,
-            minSize=(kk,kk),
-            flags=cv2.CASCADE_SCALE_IMAGE
-            )
-        
-        smile = smileCascade.detectMultiScale(
-            roi_gray,
-            scaleFactor= 1.2,
-            minNeighbors=125,
-            minSize=(20,20),
-            flags=cv2.CASCADE_SCALE_IMAGE
-            )
-        
-        
-        if tcount is 39:
-            tcount=0
-        
-        if tcount is 38:
-            t=t+1
-            
-        tcount=tcount+1
-        
-        if t > 20:
-            t=6
-        r=t*6
-        
-        '''
-        
         if ans < 96 :
             ans=ans-65
             t=int(ans/4)
@@ -217,25 +165,13 @@ while True:
         
         image_points[0]=np.array([shape[33][0],shape[33][1]])
                  
-        #focal_length = size[1]
-        #center = (size[1]/2, size[0]/2)
-        #camera_matrix = np.array([[focal_length,0,center[0]],[0, focal_length, center[1]],[0,0,1]], dtype='double')
-
-        #dist_coeffs = np.zeros((4,1))
-        #(success, rotation_vector, translation_vector) = cv2.solvePnP(model_points, image_points, camera_matrix, dist_coeffs, flags=cv2.SOLVEPNP_ITERATIVE)
-
-        #(nose_end_point2D, _) = cv2.projectPoints(np.array([(0.0, 0.0,1000.0)]),rotation_vector, translation_vector, camera_matrix, dist_coeffs)
-                
-        
-        # Set region of interest for smiles
+       
         for (x, y, w, h) in smile:
             f=1
             #print ("Found", count, "smiles!")
             cv2.rectangle(roi_color, (x, y), (x+w, y+h), (255, 0, 0), 1)
             count=count+1
-            #print "!!!!!!!!!!!!!!!!!"
-        
-            #print ("NO SMILE")
+
              
         p1 = ( int(image_points[0][0]), int(image_points[0][1]))
         #p2 = ( int(nose_end_point2D[0][0][0]), int(nose_end_point2D[0][0][1]))
@@ -288,18 +224,6 @@ while True:
         
         print(diffx,diffy)
         
-         
-        '''
-        file.write('\ndiffx ')
-        file.write(str(diffx))
-        file.write('\ndiffy ')
-        file.write(str(diffy))
-        file.write('\ntupx ')
-        file.write(str(tupx))
-        file.write('\ntupy ')
-        file.write(str(tupy))
-        '''
-        #print(list)
         lists.append(tup)
         if len(lists)>16:
             h=lists.pop(0)
@@ -364,42 +288,16 @@ while True:
         print('total smiles yet',smiles)
         
 
-        '''
-        if nosmile is 50 and smileflag is 0:
-            print('BINGO, you dont smile much')           
-            nosmile=0         
-        if percent>35:
-            smileflag=0
-            nosmile=0
-        '''
-        
-     
-        
-        file.write(str(mar))
-        file.write('\n')
-        
-        
-        
-        #print('LISTS',lists)
-                
-        #cv2.line(frame, p1, p2, (255,0,0), 2)
-        
-  #  if faceflag is 0:
-  #      print('reset still percent to 0')
     if faceflag is 0:
         mar=0
         percent=0
+        
     #cv2.putText(frame, 'Stillness %: {} %'.format(mar), (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,0,0), 2)
-   
     #cv2.putText(frame, 'Smile Meter: {} %'.format(percent), (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0,0), 2)
-    file2.write(str(percent))
-    file2.write('\n')
-    #cv2.putText(frame, 'Smile Meter: {} %'.format(work), (10, 90), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (27, 255, 55), 1)
-    print ("----------------------------------------------",countout)
-    #file.write('\n----------------------------------\n\n')
+    
     #file.write(str(countout))
     countout=countout+1
-    #cv2.cv.Flip(frame, None, 1)
+ 
     cv2.imshow('Smile Detector', frame)
     c = cv2.waitKey(7) % 0x100
     if c == 27:
